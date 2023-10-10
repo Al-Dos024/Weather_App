@@ -1,8 +1,11 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:weather_app/Models/weather_model.dart';
 import 'package:weather_app/Services/weather_service.dart';
+
+import '../Providers/weather_provider.dart';
 
 class SearchPage extends StatelessWidget {
   SearchPage({super.key});
@@ -23,7 +26,12 @@ class SearchPage extends StatelessWidget {
               WeatherService service = WeatherService();
               WeatherModel weather =
                   await service.getservice(CityName: CityName!);
+              Provider.of<weatherProvider>(context, listen: false).weatherData =
+                  weather;
+              Provider.of<weatherProvider>(context, listen: false).cityName =
+                  CityName;
               print(weather);
+              Navigator.pop(context);
             },
             decoration: InputDecoration(
                 contentPadding:

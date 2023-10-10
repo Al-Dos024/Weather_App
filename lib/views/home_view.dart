@@ -1,9 +1,12 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:weather_app/Models/weather_model.dart';
 import 'package:weather_app/widgets/no_weather_body.dart';
 
+import '../Providers/weather_provider.dart';
+import '../widgets/weather_info_body.dart';
 import 'Search_Page.dart';
 
 class HomeView extends StatelessWidget {
@@ -12,6 +15,7 @@ class HomeView extends StatelessWidget {
   WeatherModel? weatherData;
   @override
   Widget build(BuildContext context) {
+    weatherData = Provider.of<weatherProvider>(context).weatherData;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Weather App'),
@@ -31,7 +35,7 @@ class HomeView extends StatelessWidget {
               icon: Icon(Icons.search))
         ],
       ),
-      body: weatherData != null
+      body: weatherData == null
           ? NoWeatherBody()
           : Container(
               color: Colors.orange,
@@ -42,7 +46,8 @@ class HomeView extends StatelessWidget {
                     flex: 2,
                   ),
                   Text(
-                    "CityName",
+                    Provider.of<weatherProvider>(context).cityName ??
+                        "Cairo Is Error",
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                   ),
                   Text(
@@ -55,18 +60,21 @@ class HomeView extends StatelessWidget {
                     children: [
                       Image.asset('assets/images/clear.png'),
                       Text(
-                        "30",
+                        weatherData!.temp!.toInt().toString(),
                         style: TextStyle(
                             fontSize: 32, fontWeight: FontWeight.bold),
                       ),
                       Column(
-                        children: [Text('minTemp = 12'), Text('maxTemp = 30')],
+                        children: [
+                          Text('minTemp : ${weatherData!.minTemp!.toInt()}'),
+                          Text('maxTemp = ${weatherData!.maxTemp!.toInt()}')
+                        ],
                       )
                     ],
                   ),
                   Spacer(),
                   Text(
-                    "Clear",
+                    weatherData!.weatherStateName ?? ' ',
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                   ),
                   Spacer(
