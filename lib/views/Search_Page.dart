@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, use_build_context_synchronously, avoid_print, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,17 +14,20 @@ class SearchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Search a City "),
+        title: const Text("Search a City "),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Center(
           child: TextField(
-            onSubmitted: (Data) async {
-              CityName = Data;
+            onChanged: (data) {
+              CityName = data;
+            },
+            onSubmitted: (data) async {
+              CityName = data;
 
               WeatherService service = WeatherService();
-              WeatherModel weather =
+              WeatherModel? weather =
                   await service.getservice(CityName: CityName!);
               Provider.of<weatherProvider>(context, listen: false).weatherData =
                   weather;
@@ -35,10 +38,22 @@ class SearchPage extends StatelessWidget {
             },
             decoration: InputDecoration(
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 36, horizontal: 24),
-                label: Text("Search"),
-                suffixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
+                    const EdgeInsets.symmetric(vertical: 36, horizontal: 24),
+                label: const Text("Search"),
+                suffixIcon: GestureDetector(
+                    onTap: () async {
+                      WeatherService service = WeatherService();
+                      WeatherModel? weather =
+                          await service.getservice(CityName: CityName!);
+                      Provider.of<weatherProvider>(context, listen: false)
+                          .weatherData = weather;
+                      Provider.of<weatherProvider>(context, listen: false)
+                          .cityName = CityName;
+                      print(weather);
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(Icons.search)),
+                border: const OutlineInputBorder(),
                 hintText: "Enter a City :"),
           ),
         ),

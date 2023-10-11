@@ -10,7 +10,13 @@ class WeatherInfoBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.orange,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(colors: [
+          weatherData!.getColor(),
+          weatherData!.getColor()[300]!,
+          weatherData!.getColor()[50]!
+        ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -19,17 +25,17 @@ class WeatherInfoBody extends StatelessWidget {
           ),
           Text(
             Provider.of<weatherProvider>(context).cityName ?? "Cairo Is Error",
-            style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
           ),
-          const Text(
-            "Time : 2-12-2003",
-            style: TextStyle(fontSize: 24),
+          Text(
+            'last updated : ${weatherData!.date!.hour.toString()}:${weatherData!.date!.minute.toString()}',
+            style: const TextStyle(fontSize: 20),
           ),
           const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Image.asset('assets/images/clear.png'),
+              Image.asset(weatherData!.getImage()),
               Text(
                 weatherData!.temp!.toInt().toString(),
                 style:
