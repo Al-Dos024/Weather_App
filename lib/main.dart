@@ -8,7 +8,7 @@ void main() {
       create: (context) {
         return weatherProvider();
       },
-      child: WeatherApp()));
+      child: const WeatherApp()));
 }
 
 class WeatherApp extends StatelessWidget {
