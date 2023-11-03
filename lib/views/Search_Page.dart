@@ -1,13 +1,16 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:weather_app/Cubit/weather_cubit.dart';
 import 'package:weather_app/Models/weather_model.dart';
 import 'package:weather_app/Services/weather_service.dart';
-
 import '../Providers/weather_provider.dart';
 
 class SearchPage extends StatelessWidget {
   SearchPage({super.key});
-  String? CityName;
+  String? cityName;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,19 +22,13 @@ class SearchPage extends StatelessWidget {
         child: Center(
           child: TextField(
             onChanged: (data) {
-              CityName = data;
+              cityName = data;
             },
             onSubmitted: (data) async {
-              CityName = data;
-
-              WeatherService service = WeatherService();
-              WeatherModel? weather =
-                  await service.getservice(CityName: CityName!);
-              Provider.of<weatherProvider>(context, listen: false).weatherData =
-                  weather;
-              Provider.of<weatherProvider>(context, listen: false).cityName =
-                  CityName;
-              print(weather);
+              cityName = data;
+              BlocProvider.of<WeatherCubit>(context)
+                  .getWeather(cityName: cityName!);
+              BlocProvider.of<WeatherCubit>(context).cityname = cityName;
               Navigator.pop(context);
             },
             decoration: InputDecoration(
@@ -42,11 +39,11 @@ class SearchPage extends StatelessWidget {
                     onTap: () async {
                       WeatherService service = WeatherService();
                       WeatherModel? weather =
-                          await service.getservice(CityName: CityName!);
+                          await service.getservice(CityName: cityName!);
                       Provider.of<weatherProvider>(context, listen: false)
                           .weatherData = weather;
                       Provider.of<weatherProvider>(context, listen: false)
-                          .cityName = CityName;
+                          .cityName = cityName;
                       print(weather);
                       Navigator.pop(context);
                     },

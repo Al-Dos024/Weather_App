@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_app/Cubit/weather_cubit.dart';
 import 'package:weather_app/Models/weather_model.dart';
 
-import '../Providers/weather_provider.dart';
-
 class WeatherInfoBody extends StatelessWidget {
-  const WeatherInfoBody({Key? key, this.weatherData}) : super(key: key);
+  WeatherInfoBody({Key? key, this.weatherData}) : super(key: key);
   final WeatherModel? weatherData;
   @override
   Widget build(BuildContext context) {
@@ -24,7 +23,7 @@ class WeatherInfoBody extends StatelessWidget {
             flex: 2,
           ),
           Text(
-            Provider.of<weatherProvider>(context).cityName ?? "Cairo Is Error",
+            BlocProvider.of<WeatherCubit>(context).cityname!,
             style: const TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
           ),
           Text(
